@@ -1,4 +1,16 @@
 #include "Deployed.h"
 #include <iostream>
-std::string Deployed::state() const { return "Deployed"; }
-void Deployed::updateState() { std::cout << "Task is already Deployed.\n"; }
+#include "Task.h"
+#include "TaskState.h"
+using namespace std;
+
+Deployed::Deployed(Task* context) : TaskState(context){}
+
+string Deployed::state()const{
+    return "Deployed";
+}
+
+void updateState(TaskState* requested){
+    cout << "This Task is already deployed\n";
+}
+

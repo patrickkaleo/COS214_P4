@@ -1,5 +1,22 @@
+#include "Task.h"
 #include "Design.h"
-#include <iostream>
-#include "Implementation.h"
-std::string Design::state() const { return "Design"; }
-void Design::updateState() { std::cout << "Transitioning from Design to Implementation.\n"; }
+#include "TaskState.h"
+using namespace std;
+
+class Task;
+
+Design::Design(Task* context) : TaskState(context){}
+
+string Design::state()const{
+    return "Design";
+}
+
+void Design::updateState(TaskState *requested){
+    if(requested->state() == "Implemenation"){
+        context->setState(requested);
+        delete this;
+    }
+    else{
+        cout << "Invalid Request";
+    }
+}
