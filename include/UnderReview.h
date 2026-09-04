@@ -1,9 +1,13 @@
 #ifndef UNDER_REVIEW_H
 #define UNDER_REVIEW_H
 #include "TaskState.h"
-class UnderReview : public TaskState {
-public:
-    std::string state() const override;
-    void updateState() override;
+class Task;
+
+class UnderReview : public TaskState{
+    public:
+        UnderReview(Task* context);
+        
+        std::string state()const;
+        void updateState(TaskState* requested);
 };
 #endif

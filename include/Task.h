@@ -14,6 +14,7 @@ public:
     virtual ~Task();
     virtual void logState() const;
     virtual void updateState(TaskState* newState);
+    virtual void setState(TaskState* newState);
     virtual Iterator* begin() = 0;
     virtual Iterator* end() = 0;
     virtual void add(Task* child);

@@ -1,9 +1,15 @@
 #ifndef DEPLOYED_H
 #define DEPLOYED_H
 #include "TaskState.h"
-class Deployed : public TaskState {
-public:
-    std::string state() const override;
-    void updateState() override;
+#include "Task.h"
+
+class Task;
+class Deployed : public TaskState{
+    public:
+        Deployed(Task* context);
+
+        std::string state()const;
+        void updateState(TaskState* requested);
 };
+
 #endif

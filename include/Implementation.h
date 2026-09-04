@@ -1,9 +1,13 @@
 #ifndef IMPLEMENTATION_H
 #define IMPLEMENTATION_H
 #include "TaskState.h"
-class Implementation : public TaskState {
-public:
-    std::string state() const override;
-    void updateState() override;
+class Task;
+
+class Implementation : public TaskState{
+    public:
+        Implementation(Task* context);
+
+        std::string state()const;
+        void updateState(TaskState* requested);
 };
 #endif
