@@ -7,8 +7,11 @@
 // files 
 #include "TaskState.h"
 #include "Iterator.h"
-#include "TGIterator.h"
-#include "StateIterator.h"
+
+
+//forward declarations
+class StateIterator;
+class TGIterator;
 
 /**
  * @class Task: Component abstract for composite and decorator class
@@ -22,7 +25,7 @@ public:
 	/**
 	 * @brief Print the status of the component
 	 */
-	virtual void logState() const;
+	virtual void logState() const;\
 	
 	/**
 	 * @brief return the state of the component

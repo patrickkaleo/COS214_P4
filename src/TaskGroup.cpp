@@ -44,13 +44,13 @@ TGIterator *TaskGroup::createTGIterator() {
 	return new TGIterator(this->children); 
 }
 
-StateIterator *TaskGroup::createStateIterator() { 
-	return new StateIterator(children); 
+StateIterator *TaskGroup::createStateIterator(TaskState* state) { 
+	return new StateIterator(children, state); 
 }
 
 const std::vector<Task*>& TaskGroup::getChildren() const
 {
-	return children;
+	return this->children;
 }
 
 Iterator* TaskGroup::begin()

@@ -1,10 +1,5 @@
 #include "Iterator.h"
 
-Iterator::Iterator()
-{
-	current = children.begin();
-}
-
 bool Iterator::isStart() 
 {
 	return this->current==this->children.begin();

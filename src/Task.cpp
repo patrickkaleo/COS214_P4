@@ -1,4 +1,6 @@
 #include "Task.h"
+#include "TGIterator.h"
+#include "StateIterator.h"
 
 Task::Task() : state(nullptr) {}
 

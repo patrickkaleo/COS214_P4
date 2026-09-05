@@ -11,7 +11,7 @@ class Iterator
 {
 
 public:
-	Iterator() {}
+	Iterator();
 	virtual ~Iterator() {};
 	
 	/**
