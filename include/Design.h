@@ -6,7 +6,6 @@ class Task;
 class Design : public TaskState{
     public:
         Design(Task* context);
-
         std::string state()const;
         void updateState(TaskState* requested);
 };

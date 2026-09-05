@@ -12,6 +12,6 @@ public:
     Iterator* begin() override;
     Iterator* end() override;
     TGIterator* createTGIterator() override;
-    BFSIterator* createBFSIterator() override;
+    StateIterator* createStateIterator() override;
 };
 #endif

@@ -6,4 +6,4 @@ std::string TaskDecorator::decoration() const { return deco; }
 Iterator* TaskDecorator::begin() { return item->begin(); }
 Iterator* TaskDecorator::end() { return item->end(); }
 TGIterator* TaskDecorator::createTGIterator() { return item->createTGIterator(); }
-BFSIterator* TaskDecorator::createBFSIterator() { return item->createBFSIterator(); }
+StateIterator* TaskDecorator::createStateIterator() { return item->createStateIterator(); }

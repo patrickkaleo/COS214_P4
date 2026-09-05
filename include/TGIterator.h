@@ -1,12 +1,19 @@
-#ifndef TG_ITERATOR_H
-#define TG_ITERATOR_H
+#ifndef TGITERATORH
+#define TGITERATOR_H
 #include "Iterator.h"
-class TGIterator : public Iterator {
+
+/**
+ * @class TGIterator: concrete iterator for traversing the children's vector list in TaskGroup
+ */
+class TGIterator : public Iterator
+{
 public:
-    using Iterator::Iterator;
-    Iterator* operator++() override;
-    Iterator* operator--();
-    Task& operator*() override;
-    bool operator==(const Iterator& other) const override;
+	TGIterator(const std::vector<Task *> &children);
+	Iterator *operator++();
+	Iterator *operator--();
+	Task &operator*();
+	bool operator==(const Iterator &other) const;
+	Iterator *begin();
+	Iterator *end();
 };
 #endif
