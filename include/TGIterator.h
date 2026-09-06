@@ -1,4 +1,4 @@
-#ifndef TGITERATORH
+#ifndef TGITERATOR_H
 #define TGITERATOR_H
 #include "Iterator.h"
 

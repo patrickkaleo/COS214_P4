@@ -14,6 +14,7 @@ class StateIterator : public Iterator
 
 public:
 	StateIterator(std::vector<Task *> &children, TaskState* state);
+	~StateIterator();
 	Iterator *operator++();
 	Iterator *operator--();
 	Task &operator*();
@@ -21,6 +22,7 @@ public:
 
 protected:
 	TaskState *state;
+	bool ownsState;
 };
 
 #endif

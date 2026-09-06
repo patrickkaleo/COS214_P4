@@ -22,8 +22,9 @@ public:
     virtual ~Task();
 
     virtual void logState() const;
-    virtual void updateState(TaskState* newState);
+    virtual void updateState(TaskState* newState, bool testPassed);
     virtual void setState(TaskState* newState);
+    virtual TaskState* getState()const;
 
     virtual Iterator* begin() = 0;
     virtual Iterator* end() = 0;

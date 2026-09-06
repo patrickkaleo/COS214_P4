@@ -11,12 +11,12 @@ string Implementation::state()const{
     return "Implementation";
 }
 
-void Implementation::updateState(TaskState* requested){
-    if(requested->state() == "UnderReview"){
+void Implementation::updateState(TaskState* requested, bool testPassed){
+    if(requested->state() == "Under Review" && testPassed){
         context->setState(requested);
-        delete this;
     }
     else{
         cout << "Invalid Request";
+        delete requested; // rejected: nobody adopted it, so we must free it
     }
 }

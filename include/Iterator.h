@@ -2,7 +2,7 @@
 #define ITERATOR_H
 #include <vector>
 
-#include "Task.h"
+class Task;
 /**
  * @class Iterate: Defines the interface for traversing the TakGroup without exposing the childrens vector
  * @brief Participation: Iterator in Iterator DP.

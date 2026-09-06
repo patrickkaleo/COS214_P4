@@ -24,6 +24,102 @@ bool runTests(Task* task) {
     return true;
 }
 
+// =====================================================================
+// TASK 3 - SCENARIO 1: "A feature gets fast-tracked mid-sprint"
+//
+// Demonstrates, together: traversal of nested objects (TGIterator),
+// a decorated object participating in normal system behaviour, a
+// runtime structural change (a plain task is replaced in-place by
+// its decorated version), and state-dependent behaviour (the task
+// then progresses through its lifecycle while inside the group).
+// =====================================================================
+void scenarioFastTrackFeature() {
+    section("TASK 3 - SCENARIO 1: Fast-tracking a feature mid-sprint");
+
+    TaskGroup* sprint = new TaskGroup("Sprint 12");
+    UnitTask* loginBug = new UnitTask("Fix login bug");
+    sprint->add(loginBug);
+    sprint->add(new UnitTask("Update changelog"));
+
+    std::cout << "Sprint before any changes (traversed via TGIterator):\n";
+    Iterator* it = sprint->begin();
+    Iterator* end = sprint->end();
+    while (!(*it == *end)) {
+        std::cout << "  - " << (**it).getDescription()
+                  << " [" << (**it).getState()->state() << "]\n";
+        ++(*it);
+    }
+    delete it;
+    delete end;
+
+    std::cout << "\n'Fix login bug' gets flagged urgent mid-sprint.\n";
+    std::cout << "Runtime change: removing the plain task and replacing it with a decorated version.\n";
+    sprint->remove(loginBug);              // structural change: item removed
+    Task* urgentBug = new PriorityDecorator(loginBug, "Critical");
+    sprint->add(urgentBug);                // structural change: decorated version added back
+
+    std::cout << "\nThe decorated task now progresses through its lifecycle while inside the group:\n";
+    urgentBug->updateState(new Implementation(loginBug), runTests(urgentBug));
+
+    std::cout << "\nSprint after the change (decoration visible, state updated):\n";
+    sprint->logState();
+
+    delete sprint; // cascades: deletes urgentBug -> deletes loginBug, and the other UnitTask
+}
+
+// =====================================================================
+// TASK 3 - SCENARIO 2: "A task fails review and gets kicked back"
+//
+// Demonstrates, together: a second, different traversal purpose
+// (StateIterator, filtering by state rather than visiting everything),
+// state-dependent behaviour via the reject path, and a runtime change
+// in the form of a state regression rather than a forward transition.
+//
+// NOTE: StateIterator::operator++ currently only advances to the
+// first match starting from its current position - it does not skip
+// past a match it is already sitting on. So this scenario uses it to
+// find "a" task in a given state, not to enumerate every match. That
+// limitation is worth raising with Patrick since it affects how
+// StateIterator can safely be used elsewhere.
+// =====================================================================
+void scenarioReviewRejection() {
+    section("TASK 3 - SCENARIO 2: A task fails review and gets kicked back");
+
+    TaskGroup* sprint = new TaskGroup("Sprint 13");
+    UnitTask* deployTask = new UnitTask("Deploy to production");
+    sprint->add(deployTask);
+    sprint->add(new UnitTask("Write release notes"));
+
+    // Move deployTask to UnderReview first so there's something to find.
+    deployTask->updateState(new Implementation(deployTask), runTests(deployTask));
+    deployTask->updateState(new UnderReview(deployTask), runTests(deployTask));
+
+    std::cout << "Finding a task currently 'Under Review' via StateIterator:\n";
+    TaskState* underReviewFilter = new UnderReview(nullptr);
+    StateIterator* sit = sprint->createStateIterator(underReviewFilter);
+    ++(*sit); // advances to the first match, or to end() if none found
+    Task& found = **sit;
+    std::cout << "  Found: " << found.getDescription()
+              << " [" << found.getState()->state() << "]\n";
+    delete sit;
+    delete underReviewFilter; // this comparison object is ours, StateIterator never adopts it
+
+    std::cout << "\nReviewer rejects it. Runtime change: state regresses backward, not forward.\n";
+    deployTask->updateState(new Implementation(deployTask), runTests(deployTask));
+
+    std::cout << "\nFinding a task currently 'Implementation' via StateIterator (should now find it):\n";
+    TaskState* implementationFilter = new Implementation(nullptr);
+    StateIterator* sit2 = sprint->createStateIterator(implementationFilter);
+    ++(*sit2);
+    Task& foundAgain = **sit2;
+    std::cout << "  Found: " << foundAgain.getDescription()
+              << " [" << foundAgain.getState()->state() << "]\n";
+    delete sit2;
+    delete implementationFilter; // same reasoning: ours to free
+
+    delete sprint;
+}
+
 int main() {
 
     // ---------------------------------------------------------------
@@ -183,6 +279,9 @@ int main() {
     std::cout << "Rubric requires a documented policy for structural change during traversal.\n";
     std::cout << "This system does not yet enforce iterator invalidation on structural change -\n";
     std::cout << "flagging this as something the team still needs to design (Task 3 requirement).\n";
+
+    scenarioFastTrackFeature();
+    scenarioReviewRejection();
 
     // ---------------------------------------------------------------
     section("CLEANUP: ownership / destruction");

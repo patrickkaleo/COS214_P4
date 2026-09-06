@@ -11,16 +11,15 @@ string UnderReview::state()const{
 }
 
 
-void UnderReview::updateState(TaskState* requested){
-    if(requested->state() == "Deployed"){
+void UnderReview::updateState(TaskState* requested, bool testPassed){
+    if(requested->state() == "Deployed" && testPassed){
         context->setState(requested);
-        delete this;
     }
-    if(requested->state() == "Implemenation"){
+    else if(requested->state() == "Implementation"){
         context->setState(requested);
-        delete this;
     }
     else{
         cout << "Invalid Request";
+        delete requested; // rejected: nobody adopted it, so we must free it
     }
 }

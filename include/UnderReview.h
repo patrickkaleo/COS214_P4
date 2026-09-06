@@ -8,6 +8,6 @@ class UnderReview : public TaskState{
         UnderReview(Task* context);
         
         std::string state()const;
-        void updateState(TaskState* requested);
+        void updateState(TaskState* requested, bool testPassed);
 };
 #endif

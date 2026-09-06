@@ -14,7 +14,7 @@ class TaskState{
         virtual ~TaskState();
 
         virtual std::string state()const = 0;
-        virtual void updateState(TaskState* requested) = 0;
+        virtual void updateState(TaskState* requested, bool testPassed) = 0;
 };
 
 #endif //TASKSTATE_H
