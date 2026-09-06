@@ -6,6 +6,8 @@ OBJ_DIR=obj
 SOURCES = $(wildcard src/*.cpp)
 OBJECTS = $(SOURCES:src/%.cpp=$(OBJ_DIR)/%.o)
 
+.PHONY: all run mem gdb clean
+
 all : $(TARGET)
 
 $(TARGET): $(OBJECTS)
@@ -19,7 +21,10 @@ run : $(TARGET)
 	./$(TARGET)
 
 mem : $(TARGET)
-	valgrind --leak-check=full --track-origins=yes ./$(TARGET) 2> memory.log
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./$(TARGET) 2> memory.log
+
+gdb : $(TARGET)
+	gdb ./$(TARGET)
 
 clean:
-	rm -rf $(OBJ_DIR) $(TARGET)
+	rm -rf $(OBJ_DIR) $(TARGET) memory.log

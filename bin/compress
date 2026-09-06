@@ -1,3 +1,10 @@
 #!/bin/bash
+zipname="COS214_Practical4"
+# zip the necessary h and cpp files 
+find . -regextype posix-extended -regex "\./(bin|build|obj[^/]*)" -prune -o -regex ".*/[A-Za-z0-9]+\.(cpp|h)" -exec zip -j "$zipname" {} +
 
-#compress the filles
+./bin/pdf #create the pdf submission file
+zip -j "$zipname" makefile submission.pdf
+
+echo "Created $zipname"
+unzip -l "$zipname" #list zipped files 

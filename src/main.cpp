@@ -12,7 +12,8 @@
 #include "TGIterator.h"
 #include "StateIterator.h"
 
-void section(const std::string& title) {
+void section(const std::string &title)
+{
     std::cout << "\n========== " << title << " ==========\n";
 }
 
@@ -20,7 +21,8 @@ void section(const std::string& title) {
 // report whether it passed. A real implementation would check actual
 // test results, code review approval, or whatever "passing" means in
 // your domain. Swap this out once real test-running logic exists.
-bool runTests(Task* task) {
+bool runTests(Task *task)
+{
     return true;
 }
 
@@ -33,18 +35,20 @@ bool runTests(Task* task) {
 // its decorated version), and state-dependent behaviour (the task
 // then progresses through its lifecycle while inside the group).
 // =====================================================================
-void scenarioFastTrackFeature() {
+void scenarioFastTrackFeature()
+{
     section("TASK 3 - SCENARIO 1: Fast-tracking a feature mid-sprint");
 
-    TaskGroup* sprint = new TaskGroup("Sprint 12");
-    UnitTask* loginBug = new UnitTask("Fix login bug");
+    TaskGroup *sprint = new TaskGroup("Sprint 12");
+    UnitTask *loginBug = new UnitTask("Fix login bug");
     sprint->add(loginBug);
     sprint->add(new UnitTask("Update changelog"));
 
     std::cout << "Sprint before any changes (traversed via TGIterator):\n";
-    Iterator* it = sprint->begin();
-    Iterator* end = sprint->end();
-    while (!(*it == *end)) {
+    Iterator *it = sprint->begin();
+    Iterator *end = sprint->end();
+    while (!(*it == *end))
+    {
         std::cout << "  - " << (**it).getDescription()
                   << " [" << (**it).getState()->state() << "]\n";
         ++(*it);
@@ -54,9 +58,9 @@ void scenarioFastTrackFeature() {
 
     std::cout << "\n'Fix login bug' gets flagged urgent mid-sprint.\n";
     std::cout << "Runtime change: removing the plain task and replacing it with a decorated version.\n";
-    sprint->remove(loginBug);              // structural change: item removed
-    Task* urgentBug = new PriorityDecorator(loginBug, "Critical");
-    sprint->add(urgentBug);                // structural change: decorated version added back
+    sprint->remove(loginBug); // structural change: item removed
+    Task *urgentBug = new PriorityDecorator(loginBug, "Critical");
+    sprint->add(urgentBug); // structural change: decorated version added back
 
     std::cout << "\nThe decorated task now progresses through its lifecycle while inside the group:\n";
     urgentBug->updateState(new Implementation(loginBug), runTests(urgentBug));
@@ -82,11 +86,12 @@ void scenarioFastTrackFeature() {
 // limitation is worth raising with Patrick since it affects how
 // StateIterator can safely be used elsewhere.
 // =====================================================================
-void scenarioReviewRejection() {
+void scenarioReviewRejection()
+{
     section("TASK 3 - SCENARIO 2: A task fails review and gets kicked back");
 
-    TaskGroup* sprint = new TaskGroup("Sprint 13");
-    UnitTask* deployTask = new UnitTask("Deploy to production");
+    TaskGroup *sprint = new TaskGroup("Sprint 13");
+    UnitTask *deployTask = new UnitTask("Deploy to production");
     sprint->add(deployTask);
     sprint->add(new UnitTask("Write release notes"));
 
@@ -95,10 +100,10 @@ void scenarioReviewRejection() {
     deployTask->updateState(new UnderReview(deployTask), runTests(deployTask));
 
     std::cout << "Finding a task currently 'Under Review' via StateIterator:\n";
-    TaskState* underReviewFilter = new UnderReview(nullptr);
-    StateIterator* sit = sprint->createStateIterator(underReviewFilter);
+    TaskState *underReviewFilter = new UnderReview(nullptr);
+    StateIterator *sit = sprint->createStateIterator(underReviewFilter);
     ++(*sit); // advances to the first match, or to end() if none found
-    Task& found = **sit;
+    Task &found = **sit;
     std::cout << "  Found: " << found.getDescription()
               << " [" << found.getState()->state() << "]\n";
     delete sit;
@@ -108,10 +113,10 @@ void scenarioReviewRejection() {
     deployTask->updateState(new Implementation(deployTask), runTests(deployTask));
 
     std::cout << "\nFinding a task currently 'Implementation' via StateIterator (should now find it):\n";
-    TaskState* implementationFilter = new Implementation(nullptr);
-    StateIterator* sit2 = sprint->createStateIterator(implementationFilter);
+    TaskState *implementationFilter = new Implementation(nullptr);
+    StateIterator *sit2 = sprint->createStateIterator(implementationFilter);
     ++(*sit2);
-    Task& foundAgain = **sit2;
+    Task &foundAgain = **sit2;
     std::cout << "  Found: " << foundAgain.getDescription()
               << " [" << foundAgain.getState()->state() << "]\n";
     delete sit2;
@@ -120,19 +125,20 @@ void scenarioReviewRejection() {
     delete sprint;
 }
 
-int main() {
+int main()
+{
 
     // ---------------------------------------------------------------
     section("1. COMPOSITE: build a 3-level nested hierarchy");
     // ---------------------------------------------------------------
-    TaskGroup* project      = new TaskGroup("Website Relaunch");
-    TaskGroup* backendWork  = new TaskGroup("Backend Work");
-    TaskGroup* frontendWork = new TaskGroup("Frontend Work");
+    TaskGroup *project = new TaskGroup("Website Relaunch");
+    TaskGroup *backendWork = new TaskGroup("Backend Work");
+    TaskGroup *frontendWork = new TaskGroup("Frontend Work");
 
-    UnitTask* dbSchema = new UnitTask("Design DB schema");
-    UnitTask* authApi  = new UnitTask("Build auth API");
-    UnitTask* homepage = new UnitTask("Build homepage UI");
-    UnitTask* navbar   = new UnitTask("Build navbar component");
+    UnitTask *dbSchema = new UnitTask("Design DB schema");
+    UnitTask *authApi = new UnitTask("Build auth API");
+    UnitTask *homepage = new UnitTask("Build homepage UI");
+    UnitTask *navbar = new UnitTask("Build navbar component");
 
     backendWork->add(dbSchema);
     backendWork->add(authApi);
@@ -147,23 +153,19 @@ int main() {
     project->logState();
 
     std::cout << "\nAttempting add() on a leaf (UnitTask) - testing invalid Composite usage:\n";
-    UnitTask* rejectedChild = new UnitTask("should not be allowed");
-    try {
-        dbSchema->add(rejectedChild);
-        std::cout << "  No exception thrown (add() was silently ignored or allowed)\n";
-    } catch (const std::exception& e) {
-        std::cout << "  Caught expected exception: " << e.what() << "\n";
-        delete rejectedChild; // add() threw before storing it, so it's still ours to free
-    }
+    UnitTask *rejectedChild = new UnitTask("should not be allowed");
+    dbSchema->add(rejectedChild); //add does nothing for UnitTasks
+    delete rejectedChild; // still ours to free
 
     // ---------------------------------------------------------------
     section("2. ITERATOR: full traversal without exposing internals");
     // ---------------------------------------------------------------
     std::cout << "Traversing top-level children of 'project' via TGIterator:\n";
-    Iterator* it = project->begin();
-    Iterator* endIt = project->end();
-    while (!(*it == *endIt)) {
-        Task& t = **it;
+    Iterator *it = project->begin();
+    Iterator *endIt = project->end();
+    while (!(*it == *endIt))
+    {
+        Task &t = **it;
         std::cout << "  - " << t.getDescription() << "\n";
         ++(*it);
     }
@@ -173,8 +175,8 @@ int main() {
     // ---------------------------------------------------------------
     section("3. ITERATOR: two independent traversals over the same structure");
     // ---------------------------------------------------------------
-    Iterator* itA = project->begin();
-    Iterator* itB = project->begin();
+    Iterator *itA = project->begin();
+    Iterator *itB = project->begin();
     ++(*itB);
     std::cout << "Iterator A is at: " << (**itA).getDescription() << "\n";
     std::cout << "Iterator B is at: " << (**itB).getDescription() << " (independently advanced)\n";
@@ -184,7 +186,7 @@ int main() {
     // ---------------------------------------------------------------
     section("4. STATE: valid transitions through the full lifecycle");
     // ---------------------------------------------------------------
-    UnitTask* feature = new UnitTask("Implement search feature");
+    UnitTask *feature = new UnitTask("Implement search feature");
     std::cout << "Initial state:\n";
     feature->logState();
 
@@ -223,8 +225,8 @@ int main() {
     // ---------------------------------------------------------------
     section("7. DECORATOR: single decorator adds behaviour, forwards the rest");
     // ---------------------------------------------------------------
-    UnitTask* bugfix = new UnitTask("Fix login bug");
-    Task* prioritized = new PriorityDecorator(bugfix, "High");
+    UnitTask *bugfix = new UnitTask("Fix login bug");
+    Task *prioritized = new PriorityDecorator(bugfix, "High");
     std::cout << "Decorated task logState() output:\n";
     prioritized->logState();
     std::cout << "Decorated task getDescription() still forwards to wrapped task: "
@@ -233,16 +235,16 @@ int main() {
     // ---------------------------------------------------------------
     section("8. DECORATOR: stacked decorators");
     // ---------------------------------------------------------------
-    UnitTask* deployTask = new UnitTask("Deploy to production");
-    Task* withPriority = new PriorityDecorator(deployTask, "Critical");
-    Task* withBoth      = new PersonnelDecorator(withPriority, "Junior (DevOps)");
+    UnitTask *deployTask = new UnitTask("Deploy to production");
+    Task *withPriority = new PriorityDecorator(deployTask, "Critical");
+    Task *withBoth = new PersonnelDecorator(withPriority, "Junior (DevOps)");
     std::cout << "Stacked decorator logState() output (Personnel wraps Priority wraps UnitTask):\n";
     withBoth->logState();
 
     // ---------------------------------------------------------------
     section("9. DECORATOR interacting with COMPOSITE and STATE");
     // ---------------------------------------------------------------
-    TaskGroup* sprint = new TaskGroup("Sprint 12");
+    TaskGroup *sprint = new TaskGroup("Sprint 12");
     sprint->add(withBoth);
     std::cout << "Sprint group containing a decorated task:\n";
     sprint->logState();
@@ -254,10 +256,10 @@ int main() {
     // ---------------------------------------------------------------
     section("10. STATE ITERATOR: filtering children by current state");
     // ---------------------------------------------------------------
-    TaskGroup* filterGroup = new TaskGroup("Mixed States");
-    UnitTask* t1 = new UnitTask("Task A");
-    UnitTask* t2 = new UnitTask("Task B");
-    UnitTask* t3 = new UnitTask("Task C");
+    TaskGroup *filterGroup = new TaskGroup("Mixed States");
+    UnitTask *t1 = new UnitTask("Task A");
+    UnitTask *t2 = new UnitTask("Task B");
+    UnitTask *t3 = new UnitTask("Task C");
     t2->updateState(new Implementation(t2), runTests(t2));
     filterGroup->add(t1);
     filterGroup->add(t2);
@@ -267,8 +269,10 @@ int main() {
     filterGroup->logState();
 
     std::cout << "\nFiltering for tasks currently in 'Design' state:\n";
-    for (Task* child : filterGroup->getChildren()) {
-        if (child->getState()->state() == "Design") {
+    for (Task *child : filterGroup->getChildren())
+    {
+        if (child->getState()->state() == "Design")
+        {
             std::cout << "  - " << child->getDescription() << " is in Design\n";
         }
     }
