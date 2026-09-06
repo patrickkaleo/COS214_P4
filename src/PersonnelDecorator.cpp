@@ -1,4 +1,10 @@
 #include "PersonnelDecorator.h"
-std::string PersonnelDecorator::decoration() const {
-    return "[Personnel: " + deco + "] -> " + item->getDescription();
+using namespace std;
+#include <iostream>
+
+PersonnelDecorator::PersonnelDecorator(Task* task, string p) : TaskDecorator(task), personnel(p){}
+
+void PersonnelDecorator::logState()const {
+    cout << "Personnel: " << personnel << "\n";
+    TaskDecorator::logState();
 }

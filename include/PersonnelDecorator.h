@@ -2,8 +2,11 @@
 #define PERSONNEL_DECORATOR_H
 #include "TaskDecorator.h"
 class PersonnelDecorator : public TaskDecorator {
-public:
-    using TaskDecorator::TaskDecorator;
-    std::string decoration() const override;
+    private:
+        std::string personnel;
+
+    public:
+        PersonnelDecorator(Task* task, std::string level);
+        void logState()const override;
 };
 #endif

@@ -1,9 +1,32 @@
 #include "TaskDecorator.h"
-TaskDecorator::TaskDecorator(Task* target, std::string decorationText) 
-    : Task(target->getDescription()), item(target), deco(decorationText) {}
-TaskDecorator::~TaskDecorator() { delete item; }
-std::string TaskDecorator::decoration() const { return deco; }
-Iterator* TaskDecorator::begin() { return item->begin(); }
-Iterator* TaskDecorator::end() { return item->end(); }
-TGIterator* TaskDecorator::createTGIterator() { return item->createTGIterator(); }
-BFSIterator* TaskDecorator::createBFSIterator() { return item->createBFSIterator(); }
+
+TaskDecorator::TaskDecorator(Task* task) : Task(task->getDescription()), wrappedTask(task) {}
+
+TaskDecorator::~TaskDecorator() {
+    delete wrappedTask;
+}
+
+void TaskDecorator::logState() const {
+    wrappedTask->logState();
+}
+
+void TaskDecorator::updateState(TaskState* newState) {
+    wrappedTask->updateState(newState);
+}
+
+void TaskDecorator::setState(TaskState* newState) {
+    wrappedTask->setState(newState);
+}
+
+void TaskDecorator::add(Task* child) {
+    wrappedTask->add(child);
+}
+
+std::string TaskDecorator::getDescription() const {
+    return wrappedTask->getDescription();
+}
+
+Iterator* TaskDecorator::begin() { return wrappedTask->begin(); }
+Iterator* TaskDecorator::end() { return wrappedTask->end(); }
+TGIterator* TaskDecorator::createTGIterator() { return wrappedTask->createTGIterator(); }
+BFSIterator* TaskDecorator::createBFSIterator() { return wrappedTask->createBFSIterator(); }

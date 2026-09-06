@@ -3,12 +3,18 @@
 #include "Task.h"
 class TaskDecorator : public Task {
 protected:
-    Task* item;
-    std::string deco;
+    Task* wrappedTask;
+
 public:
-    TaskDecorator(Task* target, std::string decorationText);
-    virtual ~TaskDecorator() override;
-    virtual std::string decoration() const;
+    TaskDecorator(Task* task);
+    virtual ~TaskDecorator();
+
+    void logState() const override;
+    void updateState(TaskState* newState) override;
+    void setState(TaskState* newState) override;
+    void add(Task* child) override;
+    std::string getDescription() const override;
+
     Iterator* begin() override;
     Iterator* end() override;
     TGIterator* createTGIterator() override;

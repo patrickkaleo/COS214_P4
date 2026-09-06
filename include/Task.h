@@ -20,6 +20,6 @@ public:
     virtual void add(Task* child);
     virtual TGIterator* createTGIterator() = 0;
     virtual BFSIterator* createBFSIterator() = 0;
-    std::string getDescription() const;
+    virtual std::string getDescription() const;
 };
 #endif

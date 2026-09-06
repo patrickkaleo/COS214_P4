@@ -2,8 +2,11 @@
 #define PRIORITY_DECORATOR_H
 #include "TaskDecorator.h"
 class PriorityDecorator : public TaskDecorator {
-public:
-    using TaskDecorator::TaskDecorator;
-    std::string decoration() const override;
+    private:
+        std::string priorityLevel;
+
+    public:
+        PriorityDecorator(Task* task, std::string p);
+        void logState()const override;
 };
 #endif
