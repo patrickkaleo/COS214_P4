@@ -2,10 +2,7 @@
 #include "TGIterator.h"
 #include "StateIterator.h"
 
-TaskGroup::TaskGroup(std::string description)
-{
-	this->description = description;
-}
+TaskGroup::TaskGroup(std::string description) : Task(description){}
 
 TaskGroup::~TaskGroup()
 {
@@ -20,11 +17,9 @@ void TaskGroup::logState() const
 		child->logState();
 }
 
-void TaskGroup::updateState(TaskState *newState)
-{
-	Task::updateState(newState);
-	for (auto child : this->children)
-		child->updateState(newState);
+void TaskGroup::updateState(TaskState* newState, bool testPassed) {
+    for (auto child : this->children)
+        child->updateState(newState, testPassed);
 }
 
 void TaskGroup::add(Task *child)
@@ -40,6 +35,15 @@ void TaskGroup::add(Task *child)
 	}
 }
 
+void TaskGroup::remove(Task* child){
+	for(auto itr = children.begin(); itr != children.end(); itr++){
+		if(*itr == child){
+			children.erase(itr);
+			return;
+		}
+	}
+}
+
 TGIterator *TaskGroup::createTGIterator() { 
 	return new TGIterator(this->children); 
 }
@@ -48,9 +52,9 @@ StateIterator *TaskGroup::createStateIterator(TaskState* state) {
 	return new StateIterator(children, state); 
 }
 
-const std::vector<Task*>& TaskGroup::getChildren() const
+std::vector<Task*> TaskGroup::getChildren() const
 {
-	return this->children;
+	return children;
 }
 
 Iterator* TaskGroup::begin()
@@ -60,6 +64,6 @@ Iterator* TaskGroup::begin()
 
 Iterator* TaskGroup::end()
 {
-	TGIterator proto(children);
-	return proto.end();
+	TGIterator* it = new TGIterator(this->children);
+	return it->end();
 }

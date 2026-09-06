@@ -1,18 +1,25 @@
 #include "StateIterator.h"
+#include "Task.h"
 
 StateIterator::StateIterator(std::vector<Task *> &children, TaskState *state)
 {
-	if (this->state)
+	if (state)
+	{
 		this->state = state;
+		this->ownsState = false;   // borrowed from a Task, don't delete it
+	}
 	else
+	{
 		this->state = new Design(nullptr); // Default state
+		this->ownsState = true;    // we created it, we must delete it
+	}
 	this->children = children;
 	this->current = this->children.begin();
 }
 
 StateIterator::~StateIterator()
 {
-	if (this->state)
+	if (this->ownsState && this->state)
 		delete this->state;
 	this->state = nullptr;
 }
@@ -57,12 +64,12 @@ Iterator *StateIterator::operator--()
 	}
 	else
 	{
-		while (this->current != this->children.end())
+		while (this->current != this->children.begin())
 		{
 			Task *item = *this->current;
 			if (item->getState() == nullptr)
-				break;
-			++this->current;
+				return this;
+			--this->current;
 		}
 	}
 	return this;

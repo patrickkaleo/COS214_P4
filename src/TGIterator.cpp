@@ -36,3 +36,13 @@ bool TGIterator::operator==(const Iterator &other) const
 		return false;
 	return (current - children.begin()) == (rhs->current - rhs->children.begin());
 }
+
+Iterator* TGIterator::begin() {
+    current = children.begin();
+    return this;
+}
+
+Iterator* TGIterator::end() {
+    current = children.end();
+    return this;
+}

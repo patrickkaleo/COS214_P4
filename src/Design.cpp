@@ -11,12 +11,12 @@ string Design::state()const{
     return "Design";
 }
 
-void Design::updateState(TaskState *requested){
-    if(requested->state() == "Implemenation"){
+void Design::updateState(TaskState *requested, bool testPassed){
+    if(requested->state() == "Implementation" && testPassed){
         context->setState(requested);
-        delete this;
     }
     else{
         cout << "Invalid Request";
+        delete requested; // rejected: nobody adopted it, so we must free it
     }
 }

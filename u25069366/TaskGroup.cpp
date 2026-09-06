@@ -35,6 +35,15 @@ void TaskGroup::add(Task *child)
 	}
 }
 
+void TaskGroup::remove(Task* child){
+	for(auto itr = children.begin(); itr != children.end(); itr++){
+		if(*itr == child){
+			children.erase(itr);
+			return;
+		}
+	}
+}
+
 TGIterator *TaskGroup::createTGIterator() { 
 	return new TGIterator(this->children); 
 }

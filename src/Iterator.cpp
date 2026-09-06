@@ -1,5 +1,7 @@
 #include "Iterator.h"
 
+Iterator::Iterator() {}
+
 bool Iterator::isStart() 
 {
 	return this->current==this->children.begin();

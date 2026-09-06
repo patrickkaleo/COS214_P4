@@ -14,7 +14,7 @@ public:
     virtual ~TaskDecorator() override;
 
     void logState() const override;
-    void updateState(TaskState* newState) override;
+    void updateState(TaskState* newState, bool testPassed) override;
     void setState(TaskState* newState) override;
     void add(Task* child) override;
     std::string getDescription() const override;

@@ -10,7 +10,8 @@ string Deployed::state()const{
     return "Deployed";
 }
 
-void updateState(TaskState* requested){
+void Deployed::updateState(TaskState* requested, bool testPassed){
     cout << "This Task is already deployed\n";
+    delete requested; // rejected: nobody adopted it, so we must free it
 }
 

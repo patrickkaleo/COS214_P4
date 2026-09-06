@@ -10,8 +10,8 @@ void TaskDecorator::logState() const {
     wrappedTask->logState();
 }
 
-void TaskDecorator::updateState(TaskState* newState) {
-    wrappedTask->updateState(newState);
+void TaskDecorator::updateState(TaskState* newState, bool testPassed) {
+    wrappedTask->updateState(newState, testPassed);
 }
 
 void TaskDecorator::setState(TaskState* newState) {
