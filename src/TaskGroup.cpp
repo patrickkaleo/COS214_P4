@@ -1,15 +1,65 @@
 #include "TaskGroup.h"
 #include "TGIterator.h"
-#include "BFSIterator.h"
-TaskGroup::TaskGroup(std::string description) : Task(description) {}
-TaskGroup::~TaskGroup() { for (auto child : children) delete child; }
-void TaskGroup::logState() const {
-    Task::logState();
-    for (auto child : children) child->logState();
+#include "StateIterator.h"
+
+TaskGroup::TaskGroup(std::string description)
+{
+	this->description = description;
 }
-void TaskGroup::updateState(TaskState* newState) { Task::updateState(newState); }
-void TaskGroup::add(Task* child) { children.push_back(child); }
-Iterator* TaskGroup::begin() { return createTGIterator(); }
-Iterator* TaskGroup::end() { return nullptr; } 
-TGIterator* TaskGroup::createTGIterator() { return new TGIterator(this, children); }
-BFSIterator* TaskGroup::createBFSIterator() { return new BFSIterator(this, children); }
+
+TaskGroup::~TaskGroup()
+{
+	for (auto child : children)
+		delete child;
+}
+
+void TaskGroup::logState() const
+{
+	Task::logState();
+	for (auto child : children)
+		child->logState();
+}
+
+void TaskGroup::updateState(TaskState *newState)
+{
+	Task::updateState(newState);
+	for (auto child : this->children)
+		child->updateState(newState);
+}
+
+void TaskGroup::add(Task *child)
+{
+	if (child != nullptr)
+	{
+		for (auto iterate : children)
+		{
+			if (child == iterate)
+				return;
+		}
+		children.push_back(child);
+	}
+}
+
+TGIterator *TaskGroup::createTGIterator() { 
+	return new TGIterator(this->children); 
+}
+
+StateIterator *TaskGroup::createStateIterator(TaskState* state) { 
+	return new StateIterator(children, state); 
+}
+
+const std::vector<Task*>& TaskGroup::getChildren() const
+{
+	return this->children;
+}
+
+Iterator* TaskGroup::begin()
+{
+	return createTGIterator();
+}
+
+Iterator* TaskGroup::end()
+{
+	TGIterator proto(children);
+	return proto.end();
+}

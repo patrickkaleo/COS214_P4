@@ -29,4 +29,4 @@ std::string TaskDecorator::getDescription() const {
 Iterator* TaskDecorator::begin() { return wrappedTask->begin(); }
 Iterator* TaskDecorator::end() { return wrappedTask->end(); }
 TGIterator* TaskDecorator::createTGIterator() { return wrappedTask->createTGIterator(); }
-BFSIterator* TaskDecorator::createBFSIterator() { return wrappedTask->createBFSIterator(); }
+StateIterator* TaskDecorator::createStateIterator(TaskState* state) { return wrappedTask->createStateIterator(state); }

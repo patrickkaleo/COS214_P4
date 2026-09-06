@@ -17,6 +17,6 @@ void Implementation::updateState(TaskState* requested){
         delete this;
     }
     else{
-        cout << "Invalid Request;"
+        cout << "Invalid Request";
     }
 }

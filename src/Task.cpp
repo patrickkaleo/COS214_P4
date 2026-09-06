@@ -1,22 +1,27 @@
 #include "Task.h"
-#include <iostream>
-#include <stdexcept>
-#include "Design.h"
-Task::Task(std::string desc) : description(desc), state(nullptr) {
-    state = new Design(this);
-}
+#include "TGIterator.h"
+#include "StateIterator.h"
+
+Task::Task() : state(nullptr) {}
+
 Task::~Task() { delete state; }
-void Task::logState() const {
-    if (state) std::cout << "Task: " << description << " | Status: " << state->state() << "\n";
+
+void Task::setState(TaskState *newState)
+{
+	if (this->state)
+	{
+		delete this->state;
+	}
+	state = newState;
 }
 
-void Task::setState(TaskState* newState){
-    delete state;
-    state = newState;
-}
-
-void Task::updateState(TaskState* newState) {
-    state->updateState(newState);
-}
-void Task::add(Task* child) { throw std::runtime_error("Leaf configurations cannot append child components."); }
 std::string Task::getDescription() const { return description; }
+
+void Task::logState() const
+{
+	std::cout << "Task: " << description << " | Status: " << (this->state ? state->state() : "null") << "\n";
+}
+
+TaskState* Task::getState(){return this->state;}
+
+std::string Task::getDescription() const { return this->description; }

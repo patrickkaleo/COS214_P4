@@ -1,5 +1,5 @@
-#ifndef PERSONNEL_DECORATOR_H
-#define PERSONNEL_DECORATOR_H
+#ifndef PERSONNELDECORATOR_H
+#define PERSONNELDECORATOR_H
 #include "TaskDecorator.h"
 class PersonnelDecorator : public TaskDecorator {
     private:

@@ -2,18 +2,20 @@
 #define TASK_GROUP_H
 #include "Task.h"
 #include <vector>
-class TaskGroup : public Task {
-private:
-    std::vector<Task*> children;
+class TaskGroup : public Task
+{
 public:
-    TaskGroup(std::string description);
-    ~TaskGroup() override;
-    void logState() const override;
-    void updateState(TaskState* newState) override;
-    Iterator* begin() override;
-    Iterator* end() override;
-    void add(Task* child) override;
-    TGIterator* createTGIterator() override;
-    BFSIterator* createBFSIterator() override;
+	TaskGroup(std::string description);
+	~TaskGroup();
+	void logState() const;
+	void updateState(TaskState *newState);
+	Iterator *begin();
+	Iterator *end();
+	void add(Task *child);
+	TGIterator *createTGIterator();
+	StateIterator *createStateIterator();
+
+private:
+	std::vector<Task *> children;
 };
 #endif
