@@ -26,5 +26,8 @@ mem : $(TARGET)
 gdb : $(TARGET)
 	gdb ./$(TARGET)
 
+compress: $(SOURCES) submission.md bin/compress bin/pdf
+	./bin/compress
+
 clean:
 	rm -rf $(OBJ_DIR) $(TARGET) memory.log
