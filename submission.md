@@ -129,7 +129,7 @@ __Task 5: Debugging and Memory Investigation__
 
 _GDB: traversal_
 
-```
+```bash
 gdb ./taskforge
 (gdb) break TGIterator::operator++
 (gdb) run
@@ -141,7 +141,7 @@ First hit after `project->begin()` is `Backend Work`, next is `Frontend Work`. T
 
 _GDB: decorator / state_
 
-```
+```bash
 (gdb) break TaskDecorator::updateState
 (gdb) break Design::updateState
 (gdb) run
@@ -152,7 +152,7 @@ On the stacked task (`PersonnelDecorator` wrapping `PriorityDecorator` wrapping 
 
 Actual captured session, breaking on `Design::updateState` during the lifecycle demo:
 
-```
+```bash
 (gdb) break Design::updateState
 Breakpoint 1 at 0x3752: file src/Design.cpp, line 14.
 (gdb) run
@@ -182,13 +182,13 @@ This confirms the breakpoint paused execution at the exact moment the transition
 
 _Valgrind_
 
-```
+```bash
 make mem
 ```
 
 Full run captured under `valgrind --leak-check=full --show-leak-kinds=all ./taskforge`, exercising every pattern and both Task 3 scenarios in one pass:
 
-```
+```bash
 ==52807== Memcheck, a memory error detector
 ==52807== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
 ==52807== Using Valgrind-3.22.0 and LibVEX; rerun with -h for copyright info
@@ -223,7 +223,7 @@ __Task 6: Docker and GitHub Workflow__
 
 Dockerfile is Ubuntu 22.04 with `g++`, `make`, `gdb`, `valgrind`. It copies `makefile`, `include/`, `src/` and `make`s `taskforge`. Default cmd is `./taskforge`.
 
-```
+```bash
 docker build -t taskforge .
 docker run --rm taskforge
 docker run --rm --entrypoint make taskforge mem
@@ -231,7 +231,7 @@ docker run --rm --entrypoint make taskforge mem
 
 GDB inside docker needs ptrace:
 
-```
+```bash
 docker run --rm -it --cap-add=SYS_PTRACE --security-opt seccomp=unconfined --entrypoint gdb taskforge ./taskforge
 ```
 
